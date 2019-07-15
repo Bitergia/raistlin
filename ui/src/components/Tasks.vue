@@ -1,7 +1,18 @@
 <template>
   <div class="container" style="align-items: center">
+    <!-- Errors -->
+    <div v-if="errors && errors.length">
+      <article class="message is-danger" align="center" v-bind:key="error" v-for="error of errors">
+        <div class="message-header">
+          <p>Error {{error.status}}</p>
+          <button class="delete" aria-label="delete"></button>
+        </div>
+        <div class="message-body">{{error.data.message}}</div>
+      </article>
+    </div>
+
     <h3 style="margin-top: 5%" class="title is-3" align="center">KingArthur tasks list</h3>
-    <table class="table" align="center" v-if="tasks && tasks.length">
+    <table class="table" align="center" v-if="tasks && tasks.length && !errors.length">
       <thead>
         <tr>
           <th scope="col" class="text-muted">Status</th>
@@ -27,11 +38,18 @@
           <td class="task-id">{{ task.category }}</td>
           <td>
             <i class="fas fa-calendar-alt text-muted"></i>
-            {{task.created_on}}
+            {{task.created_on | prettyDate}}
           </td>
         </tr>
       </tbody>
     </table>
+    <article class="message is-warning" align="center" v-if="!tasks.length && !errors.length">
+      <div class="message-header">
+        <p>Warning</p>
+        <button class="delete" aria-label="delete"></button>
+      </div>
+      <div class="message-body">There aren't tasks in the KingArthur server</div>
+    </article>
   </div>
 </template>
 
@@ -52,8 +70,17 @@ export default {
         this.tasks = response.data;
       })
       .catch((e) => {
-        this.errors.push(e);
+        this.errors.push(e.response);
       });
+  },
+  // Filters
+  filters: {
+    prettyDate(tsdate) {
+      if (!tsdate) return '';
+      const date = new Date(tsdate * 1000);
+      const dateString = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}`;
+      return dateString;
+    },
   },
 };
 </script>
@@ -74,5 +101,11 @@ li {
 }
 a {
   color: #42b983;
+}
+article {
+  width: 60%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
