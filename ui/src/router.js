@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Tasks from '@/components/Tasks.vue';
+import Task from '@/components/Task.vue';
 
 Vue.use(Router);
 
@@ -13,8 +14,13 @@ export default new Router({
     },
     {
       path: '/tasks',
-      name: 'Tasks',
+      name: 'Tasks list',
       component: Tasks,
+    },
+    {
+      path: '/tasks/:task_id',
+      name: 'Task',
+      component: Task,
     },
   ],
 });

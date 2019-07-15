@@ -20,6 +20,7 @@
           <th scope="col">Backend</th>
           <th scope="col">Category</th>
           <th scope="col">Created on</th>
+          <th scope="col"></th>
         </tr>
       </thead>
 
@@ -29,7 +30,7 @@
           id="task-0"
           data-backend="rw"
           data-status
-          v-bind:key="task"
+          v-bind:key="task.task_id"
           v-for="task of tasks"
         >
           <td class="task-id">{{ task.status }}</td>
@@ -39,6 +40,11 @@
           <td>
             <i class="fas fa-calendar-alt text-muted"></i>
             {{task.created_on | prettyDate}}
+          </td>
+          <td class="task-id">
+            <router-link :to="{path: '/tasks/' + task.task_id }">
+              Details
+            </router-link>
           </td>
         </tr>
       </tbody>
@@ -78,7 +84,8 @@ export default {
     prettyDate(tsdate) {
       if (!tsdate) return '';
       const date = new Date(tsdate * 1000);
-      const dateString = `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}/${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}`;
+      const dateString = `${date.getUTCFullYear()}/${date.getUTCMonth()
+        + 1}/${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}`;
       return dateString;
     },
   },
