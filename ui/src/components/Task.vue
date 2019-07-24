@@ -65,31 +65,42 @@
     <div v-if="task && !errors.length" style="margin-top: 20px" class="tabs">
       <ul>
         <li class="static" v-bind:class="{ 'is-active': (selected === 'jobs') }">
-          <a v-on:click="selected = 'jobs'">Jobs</a>
+          <router-link v-on:click.native="selected = 'jobs'"
+          :to="{path: '/tasks/' + $route.params.task_id }">
+            Jobs
+          </router-link>
+        </li>
+        <li class="static" v-if="selected === 'job_details'">
+          <span class="icon"><i class="fas fa-angle-right fa-lg" aria-hidden="true"></i></span>
+        </li>
+        <li class="static" v-if="selected === 'job_details'"
+        v-bind:class="{ 'is-active': (selected === 'job_details') }">
+          <a>{{jobSelected.job_id}}</a>
         </li>
       </ul>
     </div>
 
     <!-- Jobs content -->
+    <router-view></router-view>
     <div v-if="task && !errors.length && selected === 'jobs'">
       <ul>
         <li v-bind:key="job.job_id"
-            v-for="job of task.jobs.reverse()"
+            v-for="job of task.jobs"
             style="width: 100%">
             <div class="card job-card" align="left"
             v-bind:style="{ 'background': jobColorByStatus(job.job_status) }">
               <div class="card-content">
-                <div class="columns">
-                  <div class="column" style="border-right: 1px solid #c2c2c2;">
-                    {{job.job_status}}
+                <router-link
+                  :to="{path: '/tasks/' + $route.params.task_id + '/job/' + job.job_id }">
+                  <div class="columns" v-on:click="openJobDetails(job)">
+                    <div class="column" style="border-right: 1px solid #c2c2c2;">
+                      {{job.job_status}}
+                    </div>
+                    <div class="column" style="margin-left: 10px;">
+                      {{job.job_id}}
+                    </div>
                   </div>
-                  <div class="column" style="margin-left: 10px; border-right: 1px solid #c2c2c2;">
-                    {{job.job_id}}
-                  </div>
-                  <div align="center" class="column is-one-quarter" style="margin-left: 10px">
-                    <a>Details</a>
-                  </div>
-                </div>
+                </router-link>
               </div>
             </div>
         </li>
@@ -113,25 +124,24 @@ export default {
     jobResult: {},
   }),
   created() {
-    axios
-      .get(`/tasks/id/${this.$route.params.task_id}`)
-      .then((response) => {
-        this.task = response.data;
-      })
-      .catch((e) => {
-        this.errors.push(e.response);
-      });
+    this.getTaskData(this.$route.params.task_id);
   },
   methods: {
-    openJobResultModal(job) {
+    getTaskData(taskId) {
+      axios
+        .get(`/tasks/id/${taskId}`)
+        .then((response) => {
+          this.task = response.data;
+          this.task.jobs = this.task.jobs.reverse();
+        })
+        .catch((e) => {
+          this.errors.push(e.response);
+        });
+    },
+    openJobDetails(job) {
       this.jobSelected = job;
       this.jobResult = job.result;
-      this.modalOpened = true;
-    },
-    closeJobResultModal() {
-      this.jobSelected = {};
-      this.jobResult = {};
-      this.modalOpened = false;
+      this.selected = 'job_details';
     },
     taskColorByStatus(status) {
       if (status === 'COMPLETED') {
@@ -168,6 +178,14 @@ export default {
       return '';
     },
   },
+  watch: {
+    // eslint-disable-next-line
+    '$route.params.task_id': function (newId, oldId) {
+      if (newId !== oldId) {
+        this.getTaskData(newId);
+      }
+    },
+  },
 };
 </script>
 
@@ -190,16 +208,6 @@ article {
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
-}
-.logger {
-    background-color: #555555;
-    padding: 15px;
-    overflow: scroll;
-    width: 100%;
-    margin: 10px;
-}
-.log-content {
-  color: white
 }
 .card {
   width: 100%;
