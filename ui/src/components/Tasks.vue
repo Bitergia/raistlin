@@ -11,44 +11,48 @@
       </article>
     </div>
 
-    <h3 style="margin-top: 5%" class="title is-3" align="center">KingArthur tasks list</h3>
-    <table class="table" align="center" v-if="tasks && tasks.length && !errors.length">
-      <thead>
-        <tr>
-          <th scope="col" class="text-muted">Status</th>
-          <th scope="col">Task ID</th>
-          <th scope="col">Backend</th>
-          <th scope="col">Category</th>
-          <th scope="col">Created on</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr
-          class="repo-entry"
-          id="task-0"
-          data-backend="rw"
-          data-status
-          v-bind:key="task.task_id"
-          v-for="task of tasks"
-        >
-          <td class="task-id">{{ task.status }}</td>
-          <td class="task-id">{{ task.task_id }}</td>
-          <td class="task-id">{{ task.backend }}</td>
-          <td class="task-id">{{ task.category }}</td>
-          <td>
-            <i class="fas fa-calendar-alt text-muted"></i>
-            {{task.created_on | prettyDate}}
-          </td>
-          <td class="task-id">
-            <router-link :to="{path: '/tasks/' + task.task_id }">
-              Details
-            </router-link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <h3 style="margin-top: 5%" class="title is-2" align="center">KingArthur tasks list</h3>
+    <div v-if="tasks && tasks.length && !errors.length">
+      <ul>
+        <li v-bind:key="task.task_id"
+            v-for="task of tasks"
+            style="width: 100%">
+          <div class="card" align="left"
+          v-bind:style="{ 'background': taskColorByStatus(task.status) }">
+            <div class="card-content">
+              <div class="columns">
+                <div class="column" style="margin-left: 10px; border-right: 1px solid #c2c2c2;">
+                  <p class="title is-6">
+                    {{task.status}}
+                  </p>
+                  <p class="title is-6">
+                    <router-link :to="{path: '/tasks/' + task.task_id }">
+                      {{task.task_id}}
+                    </router-link>
+                  </p>
+                </div>
+                <div class="column" style="margin-left: 10px;">
+                  <p>
+                    <i style="margin-right: 8px"
+                    class="fas text-muted" v-bind:class="iconByCategory(task.category)">
+                    </i>
+                    {{task.backend}}
+                  </p>
+                  <p>
+                    <i style="margin-right: 8px" class="fas fa-list-ol"></i>
+                    <b>{{task.jobs.length}}</b> jobs
+                  </p>
+                  <p>
+                    <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
+                    {{task.created_on | prettyDate}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
     <article class="message is-warning" align="center" v-if="!tasks.length && !errors.length">
       <div class="message-header">
         <p>Warning</p>
@@ -61,9 +65,11 @@
 
 <script>
 import axios from 'axios';
+import cssTask from './mixins/cssTask';
 
 export default {
   name: 'Tasks',
+  mixins: [cssTask],
   data: () => ({
     tasks: [],
     errors: [],
@@ -94,7 +100,7 @@ ul {
 }
 li {
   display: inline-block;
-  margin: 0 10px;
+  margin-bottom: 15px
 }
 article {
   width: 60%;
