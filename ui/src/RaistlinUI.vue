@@ -33,10 +33,10 @@
     </nav>
 
     <router-view/>
-    <footer class="footer">
+    <div class="footer">
       <div class="content has-text-centered">
       </div>
-    </footer>
+    </div>
   </div>
 </template>
 
@@ -50,12 +50,24 @@ export default {
 @import 'sass/style.scss';
 
 html {
-    height: 100%;
-    overflow-y:hidden
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
 body {
-    min-height: 100%;
+  position: relative;
+  margin: 0;
+  padding-bottom: 6rem;
+  min-height: 100%;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+
 }
 
 .navbar {
@@ -83,21 +95,16 @@ body {
     background-color: white !important
 }
 
-body::after {
-  content: '';
-  display: block;
-  height: 50px; /* Set same as footer's height */
-}
-
-footer {
+.footer {
   position: absolute;
+  right: 0;
   bottom: 0;
-  width: 100%;
-  height: 50px;
+  left: 0;
+  padding: 1rem;
   background-color: #d16a00 !important;
-  color: white !important
+  color: white !important;
+  text-align: center;
 }
-
 
 #raistlinUI {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
