@@ -11,20 +11,25 @@
       </article>
     </div>
 
-    <h3 style="margin-top: 5%" class="title is-2" align="center">KingArthur tasks list</h3>
+    <h3 style="margin-top: 5%" class="title is-1" align="left">
+      KingArthur tasks list
+      <router-link :to="{path: '/add_task' }" class="button is-link is-outlined"
+        style="margin-top: 5px; float: right">
+        <i style="margin-right: 8px" class="fas fa-plus"></i>New
+      </router-link>
+    </h3>
     <div v-if="tasks && tasks.length && !errors.length">
       <ul>
-        <li v-bind:key="task.task_id"
-            v-for="task of tasks"
-            style="width: 100%">
-          <div class="card" align="left"
-          v-bind:style="{ 'background': taskColorByStatus(task.status) }">
+        <li v-bind:key="task.task_id" v-for="task of tasks" style="width: 100%">
+          <div
+            class="card"
+            align="left"
+            v-bind:style="{ 'background': taskColorByStatus(task.status) }"
+          >
             <div class="card-content">
               <div class="columns">
                 <div class="column" style="margin-left: 10px; border-right: 1px solid #c2c2c2;">
-                  <p class="title is-6">
-                    {{task.status}}
-                  </p>
+                  <p class="title is-6">{{task.status}}</p>
                   <p class="title is-6">
                     <router-link :to="{path: '/tasks/' + task.task_id }">
                       {{task.task_id}}
@@ -33,9 +38,11 @@
                 </div>
                 <div class="column" style="margin-left: 10px;">
                   <p>
-                    <i style="margin-right: 8px"
-                    class="fas text-muted" v-bind:class="iconByCategory(task.category)">
-                    </i>
+                    <i
+                      style="margin-right: 8px"
+                      class="fas text-muted"
+                      v-bind:class="iconByCategory(task.category)"
+                    ></i>
                     {{task.backend}}
                   </p>
                   <p>
@@ -100,7 +107,7 @@ ul {
 }
 li {
   display: inline-block;
-  margin-bottom: 15px
+  margin-bottom: 15px;
 }
 article {
   width: 60%;

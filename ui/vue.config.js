@@ -10,7 +10,7 @@ module.exports = {
   // and distribute
   devServer: {
     proxy: {
-      '/*': {
+      '/tasks': {
         // Forward frontend dev server request for /api to django dev server
         target: 'http://localhost:8000/',
       },

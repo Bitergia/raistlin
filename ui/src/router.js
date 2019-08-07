@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Tasks from '@/components/Tasks.vue';
 import Task from '@/components/Task.vue';
 import Job from '@/components/Job.vue';
+import AddTask from '@/components/AddTask.vue';
 
 Vue.use(Router);
 
@@ -30,6 +31,10 @@ export default new Router({
         },
       ],
     },
-
+    {
+      path: '/add_task',
+      name: 'Add task',
+      component: AddTask,
+    },
   ],
 });
