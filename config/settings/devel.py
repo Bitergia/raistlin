@@ -12,12 +12,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CSRF_TRUSTED_ORIGINS = ['localhost', 'localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['localhost', 'localhost:8081']
 
 CORS_ORIGIN_WHITELIST = (
 
-    'localhost:3000',
-    '127.0.0.1:3000'
+    'localhost:8081',
+    '127.0.0.1:8081'
 )
 
 CORS_ORIGIN_ALLOW_ALL = True

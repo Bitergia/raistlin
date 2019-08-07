@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='list')),
     url(r'^list', views.TasksList.as_view(), name='tasks list'),
     url(r'^id/(?P<task_id>[a-zA-Z0-9_.-]+)/$', views.Task.as_view(),
-        name='task by id')
+        name='task by id'),
+    url(r'^add_task', views.AddTask.as_view(), name='add task'),
 ]
