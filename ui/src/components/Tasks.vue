@@ -11,7 +11,16 @@
       </article>
     </div>
 
-    <h3 style="margin-top: 2%" class="title is-1" align="left">KingArthur tasks list</h3>
+    <h3 style="margin-top: 2%" class="title is-1" align="left">
+      KingArthur tasks list
+      <router-link
+        :to="{path: '/add_task' }"
+        class="button is-link is-outlined"
+        style="margin-top: 5px; float: right"
+      >
+        <i style="margin-right: 8px" class="fas fa-plus"></i>New
+      </router-link>
+    </h3>
     <div v-if="tasks && tasks.length && !errors.length">
       <ul>
         <li v-bind:key="task.task_id" v-for="task of tasks" style="width: 100%">
@@ -108,6 +117,6 @@ article {
   margin-right: auto;
 }
 .task-card a {
- color: #4a4a4a !important;
+  color: #4a4a4a !important;
 }
 </style>
