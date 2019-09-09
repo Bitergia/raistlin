@@ -88,7 +88,7 @@
             v-for="job of task.jobs"
             style="width: 100%">
             <div class="card job-card" align="left"
-            v-bind:style="{ 'background': jobColorByStatus(job.job_status) }">
+            v-bind:style="{ 'background': jobCardColorByStatus(job.job_status) }">
               <div class="card-content">
                 <router-link
                   :to="{path: '/tasks/' + $route.params.task_id + '/job/' + job.job_id }">
@@ -145,17 +145,9 @@ export default {
       this.jobResult = job.result;
       this.selected = 'job_details';
     },
-    jobColorByStatus(status) {
-      if (status === 'finished') {
-        return 'linear-gradient(to right,#39aa56 0,#39aa56 10px,#fff 10px,#fff 100%) no-repeat';
-      } if (status === 'failed') {
-        return 'linear-gradient(to right,red 0,red 10px,#fff 10px,#fff 100%) no-repeat';
-      } if (status === 'queued') {
-        return 'linear-gradient(to right,gray 0,gray 10px,#fff 10px,#fff 100%) no-repeat';
-      } if (status === 'started') {
-        return 'linear-gradient(to right,#ffd21f 0,#ffd21f 10px,#fff 10px,#fff 100%) no-repeat';
-      }
-      return '';
+    jobCardColorByStatus(status) {
+      const color = this.jobColorByStatus(status);
+      return `linear-gradient(to right,${color} 0,${color} 10px,#fff 10px,#fff 100%) no-repeat`;
     },
   },
   watch: {
