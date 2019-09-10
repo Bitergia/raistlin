@@ -22,6 +22,18 @@ const cssTask = {
       }
       return '';
     },
+    jobColorByStatus(status) {
+      if (status === 'finished') {
+        return '#39aa56';
+      } if (status === 'failed') {
+        return 'red';
+      } if (status === 'queued') {
+        return 'gray';
+      } if (status === 'started') {
+        return '#ffd21f';
+      }
+      return '';
+    },
   },
 };
 

@@ -33,7 +33,18 @@
               <router-link :to="{path: '/tasks/' + task.task_id }">
                 <div class="columns">
                   <div class="column" style="margin-left: 10px; border-right: 1px solid #c2c2c2;">
-                    <p class="title is-6">{{task.task_id}}</p>
+                    <div class="title is-6">
+                      <p style="display: inline-block; float: left">
+                        {{task.task_id}}</p>
+                      <div class="job-square tooltip is-tooltip-bottom is-tooltip-multiline"
+                      align="center"
+                      v-bind:data-tooltip="job.job_id + ' - ' + job.job_status"
+                      v-bind:key="job.job_id"
+                      v-for="job of task.jobs.slice(0,10)"
+                      v-bind:style="{ 'background-color': jobColorByStatus(job.job_status),
+                                      'float': 'right' }">
+                      </div>
+                    </div>
                     <p>{{task.status}}</p>
                   </div>
                   <div class="column" style="margin-left: 10px;">
@@ -88,10 +99,28 @@ export default {
       .get('/tasks/list')
       .then((response) => {
         this.tasks = response.data;
+        this.getTasksJobs();
       })
       .catch((e) => {
         this.errors.push(e.response);
       });
+  },
+  methods: {
+    getTasksJobs() {
+      this.tasks.forEach((task) => {
+        this.getTaskJobs(task);
+      });
+    },
+    getTaskJobs(task) {
+      axios
+        .get(`/tasks/id/${task.task_id}`)
+        .then((response) => {
+          task.jobs = response.data.jobs.reverse(); // eslint-disable-line no-param-reassign
+        })
+        .catch((e) => {
+          this.errors.push(e.response);
+        });
+    },
   },
 };
 </script>
@@ -115,6 +144,12 @@ article {
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
+}
+.job-square {
+  width: 20px;
+  height: 20px;
+  margin-left: 3px;
+  display: inline-block;
 }
 .task-card a {
   color: #4a4a4a !important;
