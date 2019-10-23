@@ -47,6 +47,27 @@ class Task(View):
         return JsonResponse(task, safe=False)
 
 
+class Job(View):
+    """Class that manage the queries related to the jobs"""
+
+    http_method_names = ['get']
+
+    def get(self, request, job_id):
+        try:
+            response = requests.get(settings.ARTHUR_SERVER +
+                                    "/job/{}".format(job_id))
+            job = json.loads(response.text)
+        except requests.exceptions.RequestException:
+            err = "Impossible connect to Arthur"
+            return JsonResponse({'status': 'false', 'message': err},
+                                status=500)
+        except json.decoder.JSONDecodeError:
+            err = "Job not found, please check the job ID"
+            return JsonResponse({'status': 'false', 'message': err},
+                                status=500)
+        return JsonResponse(job, safe=False)
+
+
 class AddTask(View):
     http_method_names = ['post']
 
