@@ -14,7 +14,9 @@
     <div align="left">
       <pre class="logger">
         <code class="log-content">
-          Logs...
+          <p v-if="!job.log">There are not logs for this job yet.</p>
+          <p v-bind:key="log"
+          v-for="log of job.log">{{log.created | prettyDate}} - ({{log.module}}) - {{log.msg}}</p>
         </code>
       </pre>
     </div>
@@ -22,11 +24,29 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Job',
   data: () => ({
     errors: [],
+    job: {},
   }),
+  created() {
+    this.getJobData(this.$route.params.job_id);
+  },
+  methods: {
+    getJobData(jobId) {
+      axios
+        .get(`/tasks/job_id/${jobId}`)
+        .then((response) => {
+          this.job = response.data;
+        })
+        .catch((e) => {
+          this.errors.push(e.response);
+        });
+    },
+  },
 };
 </script>
 
