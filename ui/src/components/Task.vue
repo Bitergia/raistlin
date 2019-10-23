@@ -75,7 +75,7 @@
         </li>
         <li class="static" v-if="selected === 'job_details'"
         v-bind:class="{ 'is-active': (selected === 'job_details') }">
-          <a>{{jobSelected.job_id}}</a>
+          <a>{{jobSelected}}</a>
         </li>
       </ul>
     </div>
@@ -92,7 +92,7 @@
               <div class="card-content">
                 <router-link
                   :to="{path: '/tasks/' + $route.params.task_id + '/job/' + job.job_id }">
-                  <div class="columns" v-on:click="openJobDetails(job)">
+                  <div class="columns">
                     <div class="column" style="border-right: 1px solid #c2c2c2;">
                       {{job.job_status}}
                     </div>
@@ -122,11 +122,15 @@ export default {
     selected: 'jobs',
     isActive: true,
     modalOpened: false,
-    jobSelected: {},
+    jobSelected: '',
     jobResult: {},
   }),
   created() {
     this.getTaskData(this.$route.params.task_id);
+    if (this.$route.params.job_id) {
+      this.selected = 'job_details';
+      this.jobSelected = this.$route.params.job_id;
+    }
   },
   methods: {
     getTaskData(taskId) {
@@ -140,11 +144,6 @@ export default {
           this.errors.push(e.response);
         });
     },
-    openJobDetails(job) {
-      this.jobSelected = job;
-      this.jobResult = job.result;
-      this.selected = 'job_details';
-    },
     jobCardColorByStatus(status) {
       const color = this.jobColorByStatus(status);
       return `linear-gradient(to right,${color} 0,${color} 10px,#fff 10px,#fff 100%) no-repeat`;
@@ -152,9 +151,21 @@ export default {
   },
   watch: {
     // eslint-disable-next-line
-    '$route.params.task_id': function (newId, oldId) {
-      if (newId !== oldId) {
-        this.getTaskData(newId);
+    '$route.params': function (newParams, oldParams) {
+      if (newParams.task_id !== oldParams.task_id) {
+        this.getTaskData(newParams.task_id);
+      }
+
+      // If the url (job_id) changes means that we are going back/forward to a job details
+      if (!newParams.job_id && oldParams.job_id) {
+        // Show the list of jobs
+        this.selected = 'jobs';
+        this.jobSelected = '';
+        this.jobResult = {};
+      } else if (newParams.job_id && !oldParams.job_id) {
+        // Show the job details
+        this.jobSelected = newParams.job_id;
+        this.selected = 'job_details';
       }
     },
   },
