@@ -38,8 +38,8 @@
                         {{task.task_id}}</p>
                       <div class="job-square tooltip is-tooltip-bottom is-tooltip-multiline"
                       align="center"
-                      v-bind:data-tooltip="job.job_id + ' - ' + job.job_status"
-                      v-bind:key="job.job_id"
+                      v-bind:data-tooltip="'#' + job.job_number + ' - ' + job.job_status"
+                      v-bind:key="job.job_number"
                       v-for="job of task.jobs.slice(0,10)"
                       v-bind:style="{ 'background-color': jobColorByStatus(job.job_status),
                                       'float': 'right' }">
