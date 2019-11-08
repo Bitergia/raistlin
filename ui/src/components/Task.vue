@@ -75,13 +75,13 @@
         </li>
         <li class="static" v-if="selected === 'job_details'"
         v-bind:class="{ 'is-active': (selected === 'job_details') }">
-          <a>{{jobSelected}}</a>
+          <a>#{{jobSelected}}</a>
         </li>
       </ul>
     </div>
 
     <!-- Jobs content -->
-    <router-view></router-view>
+    <router-view v-on:changeJobTitle="handleJobTitle"></router-view>
     <div v-if="task && !errors.length && selected === 'jobs'">
       <ul>
         <li v-bind:key="job.job_id"
@@ -94,10 +94,10 @@
                   :to="{path: '/tasks/' + $route.params.task_id + '/job/' + job.job_id }">
                   <div class="columns">
                     <div class="column" style="border-right: 1px solid #c2c2c2;">
-                      {{job.job_status}}
+                      #{{job.job_number}}
                     </div>
                     <div class="column" style="margin-left: 10px;">
-                      {{job.job_id}}
+                      {{job.job_status}}
                     </div>
                   </div>
                 </router-link>
@@ -123,13 +123,11 @@ export default {
     isActive: true,
     modalOpened: false,
     jobSelected: '',
-    jobResult: {},
   }),
   created() {
     this.getTaskData(this.$route.params.task_id);
     if (this.$route.params.job_id) {
       this.selected = 'job_details';
-      this.jobSelected = this.$route.params.job_id;
     }
   },
   methods: {
@@ -148,6 +146,9 @@ export default {
       const color = this.jobColorByStatus(status);
       return `linear-gradient(to right,${color} 0,${color} 10px,#fff 10px,#fff 100%) no-repeat`;
     },
+    handleJobTitle(jobNumber) {
+      this.jobSelected = jobNumber;
+    },
   },
   watch: {
     // eslint-disable-next-line
@@ -160,11 +161,8 @@ export default {
       if (!newParams.job_id && oldParams.job_id) {
         // Show the list of jobs
         this.selected = 'jobs';
-        this.jobSelected = '';
-        this.jobResult = {};
       } else if (newParams.job_id && !oldParams.job_id) {
         // Show the job details
-        this.jobSelected = newParams.job_id;
         this.selected = 'job_details';
       }
     },

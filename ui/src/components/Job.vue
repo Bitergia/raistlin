@@ -41,10 +41,19 @@ export default {
         .get(`/tasks/job_id/${jobId}`)
         .then((response) => {
           this.job = response.data;
+          this.$emit('changeJobTitle', this.job.job_number);
         })
         .catch((e) => {
           this.errors.push(e.response);
         });
+    },
+  },
+  watch: {
+    // eslint-disable-next-line
+    '$route.params': function (newParams, oldParams) {
+      if (newParams.job_id !== oldParams.job_id) {
+        this.getJobData(newParams.job_id);
+      }
     },
   },
 };
