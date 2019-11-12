@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^job_id/(?P<job_id>[a-zA-Z0-9_.-]+)/$', views.Job.as_view(),
         name='job by id'),
     url(r'^add_task', views.AddTask.as_view(), name='add task'),
+    url(r'^remove_task', views.RemoveTask.as_view(), name='remove task'),
 ]

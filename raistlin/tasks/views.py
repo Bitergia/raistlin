@@ -112,3 +112,27 @@ class AddTask(View):
                                 status=500)
         return JsonResponse({'status': 'ok',
                              'message': "Task added correctly"}, safe=False)
+
+
+class RemoveTask(View):
+    http_method_names = ['post']
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(RemoveTask, self).dispatch(*args, **kwargs)
+
+    def post(self, request):
+        task_id = json.loads(request.body)['taskId']
+        task_to_remove = {
+          'tasks': [{
+              'task_id': task_id
+          }]
+        }
+        response = requests.post(url=settings.ARTHUR_SERVER + "/remove",
+                                 json=task_to_remove)
+        if response.status_code != 200:
+            err = "Error removing the task from KingArthur"
+            return JsonResponse({'status': 'false', 'message': err},
+                                status=500)
+        return JsonResponse({'status': 'ok',
+                             'message': "Task removed correctly"}, safe=False)
