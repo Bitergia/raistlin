@@ -21,52 +21,66 @@
         <i style="margin-right: 8px" class="fas fa-plus"></i>New
       </router-link>
     </h3>
-    <div v-if="tasks && tasks.length && !errors.length">
+    <div v-if="tasks && tasks.length">
       <ul>
         <li v-bind:key="task.task_id" v-for="task of tasks" style="width: 100%">
-          <div
-            class="card"
-            align="left"
-            v-bind:style="{ 'background': taskColorByStatus(task.status) }"
-          >
-            <div class="card-content task-card">
-              <router-link :to="{path: '/tasks/' + task.task_id }">
-                <div class="columns">
-                  <div class="column" style="margin-left: 10px; border-right: 1px solid #c2c2c2;">
-                    <div class="title is-6">
-                      <p style="display: inline-block; float: left">
-                        {{task.task_id}}</p>
-                      <div class="job-square tooltip is-tooltip-bottom is-tooltip-multiline"
-                      align="center"
-                      v-bind:data-tooltip="'#' + job.job_number + ' - ' + job.job_status"
-                      v-bind:key="job.job_number"
-                      v-for="job of task.jobs.slice(0,10)"
-                      v-bind:style="{ 'background-color': jobColorByStatus(job.job_status),
-                                      'float': 'right' }">
+          <div class="columns">
+            <div class="column is-11" style="width: 95%">
+              <div
+                class="card"
+                align="left"
+                v-bind:style="{ 'background': taskColorByStatus(task.status) }"
+              >
+                <div class="card-content task-card">
+                  <router-link :to="{path: '/tasks/' + task.task_id }">
+                    <div class="columns">
+                      <div
+                        class="column"
+                        style="margin-left: 10px; border-right: 1px solid #c2c2c2;"
+                      >
+                        <div class="title is-6">
+                          <p style="display: inline-block; float: left">{{task.task_id}}</p>
+                          <div
+                            class="job-square tooltip is-tooltip-bottom is-tooltip-multiline"
+                            align="center"
+                            v-bind:data-tooltip="'#' + job.job_number + ' - ' + job.job_status"
+                            v-bind:key="job.job_number"
+                            v-for="job of task.jobs.slice(0,10)"
+                            v-bind:style="{ 'background-color': jobColorByStatus(job.job_status),
+                                      'float': 'right' }"
+                          ></div>
+                        </div>
+                        <p>{{task.status}}</p>
+                      </div>
+                      <div class="column" style="margin-left: 10px;">
+                        <p>
+                          <i
+                            style="margin-right: 8px"
+                            class="fas text-muted"
+                            v-bind:class="iconByCategory(task.category)"
+                          ></i>
+                          {{task.backend}}
+                        </p>
+                        <p>
+                          <i style="margin-right: 8px" class="fas fa-list-ol"></i>
+                          <b>{{task.jobs.length}}</b> jobs
+                        </p>
+                        <p>
+                          <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
+                          {{task.created_on | prettyDate}}
+                        </p>
                       </div>
                     </div>
-                    <p>{{task.status}}</p>
-                  </div>
-                  <div class="column" style="margin-left: 10px;">
-                    <p>
-                      <i
-                        style="margin-right: 8px"
-                        class="fas text-muted"
-                        v-bind:class="iconByCategory(task.category)"
-                      ></i>
-                      {{task.backend}}
-                    </p>
-                    <p>
-                      <i style="margin-right: 8px" class="fas fa-list-ol"></i>
-                      <b>{{task.jobs.length}}</b> jobs
-                    </p>
-                    <p>
-                      <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
-                      {{task.created_on | prettyDate}}
-                    </p>
-                  </div>
+                  </router-link>
                 </div>
-              </router-link>
+              </div>
+            </div>
+            <div class="column is-1 stacked-card">
+              <p>
+                <a class="fas text-muted fa-trash"
+                  style="font-size: 20px"
+                  v-on:click="openDeleteModal(task.task_id)"></a>
+              </p>
             </div>
           </div>
         </li>
@@ -79,19 +93,41 @@
       </div>
       <div class="message-body">There aren't tasks in the KingArthur server</div>
     </article>
+
+    <div class="modal" v-bind:class="{ 'is-active': activeModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Warning!</p>
+        </header>
+        <section class="modal-card-body">
+          Do you want to delete the task <b>{{taskToDelete}}</b>?
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success"
+            v-on:click="deleteTaskById(taskToDelete); closeDeleteModal()">
+            Delete
+          </button>
+          <button class="button is-danger" v-on:click="closeDeleteModal()">Cancel</button>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import cssTask from './mixins/cssTask';
+import deleteTask from './mixins/deleteTask';
 
 export default {
   name: 'Tasks',
-  mixins: [cssTask],
+  mixins: [cssTask, deleteTask],
   data: () => ({
     tasks: [],
     errors: [],
+    taskToDelete: '',
+    activeModal: false,
   }),
   // When component created
   created() {
@@ -120,6 +156,14 @@ export default {
         .catch((e) => {
           this.errors.push(e.response);
         });
+    },
+    openDeleteModal(taskId) {
+      this.taskToDelete = taskId;
+      this.activeModal = true;
+    },
+    closeDeleteModal() {
+      this.taskToDelete = '';
+      this.activeModal = false;
     },
   },
 };
@@ -151,7 +195,24 @@ article {
   margin-left: 3px;
   display: inline-block;
 }
+.card {
+  box-shadow: 5px 0 7px -2px #888;
+}
 .task-card a {
   color: #4a4a4a !important;
+}
+.stacked-card {
+  padding: 0px;
+  margin: 0.75rem 0.75rem 0.75rem -12px;
+  box-shadow: rgb(136, 136, 136) 0px 0px 5px -2px;
+  width: 5%;
+
+  /* Centering items */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
