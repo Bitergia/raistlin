@@ -12,6 +12,45 @@
     </div>
 
     <div align="left">
+      <ul>
+        <li style="width: 100%">
+            <div class="card job-card" align="left"
+            v-bind:style="{ 'background': jobCardColorByStatus(job.job_status) }">
+              <div class="card-content">
+                <div class="columns">
+                  <div class="column" style="border-right: 1px solid #c2c2c2;">
+                    <p class="title is-6">
+                      {{job.job_status}}
+                    </p>
+                    <p>
+                      Job: <b>#{{job.job_number}}</b>
+                    </p>
+                    <p>
+                      ID: <b>{{job.job_id}}</b>
+                    </p>
+                  </div>
+                  <div class="column" style="margin-left: 10px;"
+                  v-if="job.job_status === 'finished'">
+                    <p>
+                      <b>{{job.result.fetched}}</b> fetched
+                    </p>
+                    <p>
+                      <b>{{job.result.skipped}}</b> skipped
+                    </p>
+                    <p>
+                      <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
+                      <b>{{job.result.min_updated_on | prettyDate}}</b> Min
+                    </p>
+                    <p>
+                      <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
+                      <b>{{job.result.max_updated_on | prettyDate}}</b> Max
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </li>
+      </ul>
       <pre class="logger">
         <code class="log-content">
           <p v-if="!job.log">There are not logs for this job yet.</p>
@@ -25,9 +64,11 @@
 
 <script>
 import axios from 'axios';
+import cssTask from './mixins/cssTask';
 
 export default {
   name: 'Job',
+  mixins: [cssTask],
   data: () => ({
     errors: [],
     job: {},

@@ -172,10 +172,6 @@ export default {
           this.errors.push(e.response);
         });
     },
-    jobCardColorByStatus(status) {
-      const color = this.jobColorByStatus(status);
-      return `linear-gradient(to right,${color} 0,${color} 10px,#fff 10px,#fff 100%) no-repeat`;
-    },
     handleJobTitle(jobNumber) {
       this.jobSelected = jobNumber;
     },
