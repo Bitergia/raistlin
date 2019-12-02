@@ -81,6 +81,11 @@
                   style="font-size: 20px"
                   v-on:click="openDeleteModal(task.task_id)"></a>
               </p>
+              <p v-if="task.status === 'FAILED'">
+                <a class="fas text-muted fa-redo-alt"
+                  style="font-size: 20px; margin-top: 10px"
+                  v-on:click="rescheduleFailedTask(task)"></a>
+              </p>
             </div>
           </div>
         </li>
@@ -165,6 +170,17 @@ export default {
       this.taskToDelete = '';
       this.activeModal = false;
     },
+    rescheduleFailedTask(task) {
+      axios.post('/tasks/reschedule_task', {
+        taskId: task.task_id,
+      })
+        .then(() => {
+          this.$router.go();
+        })
+        .catch((e) => {
+          this.errors.push(e.response);
+        });
+    },
   },
 };
 </script>
@@ -212,6 +228,7 @@ article {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
