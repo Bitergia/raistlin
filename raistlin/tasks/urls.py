@@ -13,4 +13,6 @@ urlpatterns = [
         name='job by id'),
     url(r'^add_task', views.AddTask.as_view(), name='add task'),
     url(r'^remove_task', views.RemoveTask.as_view(), name='remove task'),
+    url(r'^reschedule_task', views.RescheduleTask.as_view(),
+        name='reschedule task'),
 ]

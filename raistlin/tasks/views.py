@@ -136,3 +136,28 @@ class RemoveTask(View):
                                 status=500)
         return JsonResponse({'status': 'ok',
                              'message': "Task removed correctly"}, safe=False)
+
+
+class RescheduleTask(View):
+    http_method_names = ['post']
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(RescheduleTask, self).dispatch(*args, **kwargs)
+
+    def post(self, request):
+        task_id = json.loads(request.body)['taskId']
+        task_to_reschedule = {
+          'tasks': [{
+              'task_id': task_id
+          }]
+        }
+        response = requests.post(url=settings.ARTHUR_SERVER + "/reschedule",
+                                 json=task_to_reschedule)
+        if response.status_code != 200:
+            err = "Error rescheduling the task to KingArthur"
+            return JsonResponse({'status': 'false', 'message': err},
+                                status=500)
+        return JsonResponse({'status': 'ok',
+                             'message': "Task rescheduled correctly"},
+                            safe=False)
