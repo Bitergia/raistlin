@@ -108,7 +108,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels'
 ]
+
+ASGI_APPLICATION = "raistlin.tasks.routing.application"
+
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
