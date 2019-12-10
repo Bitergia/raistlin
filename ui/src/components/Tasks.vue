@@ -77,14 +77,18 @@
             </div>
             <div class="column is-1 stacked-card">
               <p>
-                <a class="fas text-muted fa-trash"
+                <a
+                  class="fas text-muted fa-trash"
                   style="font-size: 20px"
-                  v-on:click="openDeleteModal(task.task_id)"></a>
+                  v-on:click="openDeleteModal(task.task_id)"
+                ></a>
               </p>
               <p v-if="task.status === 'FAILED'">
-                <a class="fas text-muted fa-redo-alt"
+                <a
+                  class="fas text-muted fa-redo-alt"
                   style="font-size: 20px; margin-top: 10px"
-                  v-on:click="rescheduleFailedTask(task)"></a>
+                  v-on:click="rescheduleFailedTask(task)"
+                ></a>
               </p>
             </div>
           </div>
@@ -106,13 +110,14 @@
           <p class="modal-card-title">Warning!</p>
         </header>
         <section class="modal-card-body">
-          Do you want to delete the task <b>{{taskToDelete}}</b>?
+          Do you want to delete the task
+          <b>{{taskToDelete}}</b>?
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success"
-            v-on:click="deleteTaskById(taskToDelete); closeDeleteModal()">
-            Delete
-          </button>
+          <button
+            class="button is-success"
+            v-on:click="deleteTaskById(taskToDelete); closeDeleteModal()"
+          >Delete</button>
           <button class="button is-danger" v-on:click="closeDeleteModal()">Cancel</button>
         </footer>
       </div>
@@ -133,6 +138,7 @@ export default {
     errors: [],
     taskToDelete: '',
     activeModal: false,
+    tasksListSocket: undefined,
   }),
   // When component created
   created() {
@@ -145,6 +151,11 @@ export default {
       .catch((e) => {
         this.errors.push(e.response);
       });
+
+    this.setTaskListSocket();
+  },
+  beforeDestroy() {
+    this.tasksListSocket.close();
   },
   methods: {
     getTasksJobs() {
@@ -171,15 +182,39 @@ export default {
       this.activeModal = false;
     },
     rescheduleFailedTask(task) {
-      axios.post('/tasks/reschedule_task', {
-        taskId: task.task_id,
-      })
+      axios
+        .post('/tasks/reschedule_task', {
+          taskId: task.task_id,
+        })
         .then(() => {
           this.$router.go();
         })
         .catch((e) => {
           this.errors.push(e.response);
         });
+    },
+    setTaskListSocket() {
+      this.tasksListSocket = new WebSocket(
+        `ws://${window.location.host}/ws/tasks/list/`,
+      );
+
+      const dataParent = this;
+      this.tasksListSocket.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        dataParent.tasks = data;
+        dataParent.getTasksJobs();
+      };
+
+      this.tasksListSocket.onerror = (e) => {
+        dataParent.errors.push({
+          status: e.code,
+          data: { message: 'Unexpected error in TaskList websocket' },
+        });
+      };
+
+      this.tasksListSocket.onclose = (e) => {
+        console.log('Tasks list socket closed', e);
+      };
     },
   },
 };
