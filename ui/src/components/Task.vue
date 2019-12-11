@@ -153,6 +153,7 @@ export default {
     modalOpened: false,
     jobSelected: '',
     activeModal: false,
+    taskSocket: undefined,
   }),
   created() {
     this.getTaskData(this.$route.params.task_id);
@@ -171,9 +172,34 @@ export default {
         .catch((e) => {
           this.errors.push(e.response);
         });
+
+      this.setTaskSocket();
     },
     handleJobTitle(jobNumber) {
       this.jobSelected = jobNumber;
+    },
+    setTaskSocket() {
+      this.taskSocket = new WebSocket(
+        `ws://${window.location.host}/ws/tasks/id/${this.$route.params.task_id}/`,
+      );
+
+      const dataParent = this;
+      this.taskSocket.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        dataParent.task = data;
+        dataParent.task.jobs = dataParent.task.jobs.reverse();
+      };
+
+      this.taskSocket.onerror = (e) => {
+        dataParent.errors.push({
+          status: e.code,
+          data: { message: 'Unexpected error in Task websocket' },
+        });
+      };
+
+      this.taskSocket.onclose = (e) => {
+        console.log('Task socket closed', e);
+      };
     },
   },
   watch: {
