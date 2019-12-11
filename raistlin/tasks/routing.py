@@ -7,6 +7,8 @@ from . import consumers
 
 websocket_urlpatterns = [
     re_path(r'ws/tasks/list/$', consumers.TaskListConsumer),
+    re_path(r'ws/tasks/id/(?P<task_id>[a-zA-Z0-9_.-]+)/$',
+            consumers.TaskConsumer),
 ]
 
 
