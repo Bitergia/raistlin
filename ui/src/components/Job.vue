@@ -72,9 +72,17 @@ export default {
   data: () => ({
     errors: [],
     job: {},
+    autorefresh: undefined,
   }),
   created() {
     this.getJobData(this.$route.params.job_id);
+
+    if (this.job.job_status !== 'finished' && this.job.job_status !== 'failed') {
+      const self = this;
+      this.autorefresh = setInterval(() => {
+        self.getJobData(self.$route.params.job_id);
+      }, 5000);
+    }
   },
   methods: {
     getJobData(jobId) {
