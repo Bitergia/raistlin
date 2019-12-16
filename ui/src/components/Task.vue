@@ -153,11 +153,25 @@ export default {
     modalOpened: false,
     jobSelected: '',
     activeModal: false,
+    autorefeshTask: undefined,
   }),
   created() {
     this.getTaskData(this.$route.params.task_id);
+
+    if (this.task.status !== 'COMPLETED' && this.task.status !== 'FAILED') {
+      const self = this;
+      this.autorefresh = setInterval(() => {
+        self.getTaskData(self.$route.params.task_id);
+      }, 5000);
+    }
+
     if (this.$route.params.job_id) {
       this.selected = 'job_details';
+    }
+  },
+  beforeDestroy() {
+    if (this.autorefresh) {
+      clearInterval(this.autorefresh);
     }
   },
   methods: {
