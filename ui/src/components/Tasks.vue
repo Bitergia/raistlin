@@ -133,20 +133,32 @@ export default {
     errors: [],
     taskToDelete: '',
     activeModal: false,
+    autorefresh: undefined,
   }),
   // When component created
   created() {
-    axios
-      .get('/tasks/list')
-      .then((response) => {
-        this.tasks = response.data;
-        this.getTasksJobs();
-      })
-      .catch((e) => {
-        this.errors.push(e.response);
-      });
+    this.getTaskList();
+
+    const self = this;
+    this.autorefresh = setInterval(() => {
+      self.getTaskList();
+    }, 10000);
+  },
+  beforeDestroy() {
+    clearInterval(this.autorefresh);
   },
   methods: {
+    getTaskList() {
+      axios
+        .get('/tasks/list')
+        .then((response) => {
+          this.tasks = response.data;
+          this.getTasksJobs();
+        })
+        .catch((e) => {
+          this.errors.push(e.response);
+        });
+    },
     getTasksJobs() {
       this.tasks.forEach((task) => {
         this.getTaskJobs(task);
