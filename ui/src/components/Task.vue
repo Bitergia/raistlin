@@ -39,7 +39,7 @@
                     </p>
                     <p>
                       <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
-                      {{task.created_on | prettyDate}}
+                      {{ $filters.prettyDate(task.created_on) }}
                     </p>
                   </div>
                   <div class="column" style="margin-left: 10px;">
@@ -75,7 +75,7 @@
     <div v-if="task" style="margin-top: 20px" class="tabs">
       <ul>
         <li class="static" v-bind:class="{ 'is-active': (selected === 'jobs') }">
-          <router-link v-on:click.native="selected = 'jobs'"
+          <router-link @click="selected = 'jobs'"
           :to="{path: '/tasks/' + $route.params.task_id }">
             Jobs
           </router-link>
@@ -146,7 +146,10 @@ export default {
   name: 'Task',
   mixins: [cssTask, deleteTask],
   data: () => ({
-    task: {},
+    task: {
+      jobs: [],
+      scheduling_cfg: ""
+    },
     errors: [],
     selected: 'jobs',
     isActive: true,
@@ -160,9 +163,7 @@ export default {
 
     if (this.task.status !== 'COMPLETED' && this.task.status !== 'FAILED') {
       const self = this;
-      this.autorefresh = setInterval(() => {
-        self.getTaskData(self.$route.params.task_id);
-      }, 5000);
+      self.getTaskData(self.$route.params.task_id);
     }
 
     if (this.$route.params.job_id) {

@@ -39,11 +39,11 @@
                     </p>
                     <p>
                       <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
-                      <b>{{job.result.min_updated_on | prettyDate}}</b> Min
+                      <!-- <b>{{ prettyDate(job.result.min_updated_on) }}</b> Min -->
                     </p>
                     <p>
                       <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
-                      <b>{{job.result.max_updated_on | prettyDate}}</b> Max
+                      <!-- <b>{{ prettyDate(job.result.max_updated_on) }}</b> Max -->
                     </p>
                   </div>
                 </div>
@@ -55,7 +55,7 @@
         <code class="log-content">
           <p v-if="!job.log">There are not logs for this job yet.</p>
           <p v-bind:key="log"
-          v-for="log of job.log">{{log.created | prettyDate}} - ({{log.module}}) - {{log.msg}}</p>
+          v-for="log of job.log">{{ $filters.prettyDate(log.created) }} - ({{log.module}}) - {{log.msg}}</p>
         </code>
       </pre>
     </div>

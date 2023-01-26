@@ -67,7 +67,7 @@
                         </p>
                         <p>
                           <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
-                          {{task.created_on | prettyDate}}
+                          {{ $filters.prettyDate(task.created_on) }}
                         </p>
                       </div>
                     </div>
@@ -140,12 +140,10 @@ export default {
     this.getTaskList();
 
     const self = this;
-    this.autorefresh = setInterval(() => {
-      self.getTaskList();
-    }, 10000);
+    self.getTaskList();
   },
-  beforeDestroy() {
-    clearInterval(this.autorefresh);
+  beforeUnmount() {
+    // clearInterval(this.autorefresh);
   },
   methods: {
     getTaskList() {

@@ -1,11 +1,11 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import RaistlinUI from './RaistlinUI.vue';
-import router from './router';
-import './filters/filters';
+import { createRouter } from './router';
+import { prettyDate } from './utils/filters';
 
-Vue.config.productionTip = false;
+const router = createRouter();
+const app = createApp(RaistlinUI);
 
-new Vue({
-  router,
-  render: h => h(RaistlinUI),
-}).$mount('#raistlinUI');
+app.use(router);
+app.mount('#raistlinUI')
+app.config.globalProperties.$filters = { prettyDate }
