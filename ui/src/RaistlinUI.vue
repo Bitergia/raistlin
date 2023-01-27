@@ -1,23 +1,43 @@
 <template>
   <div id="raistlinUI">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
+    <nav
+      class="navbar"
+      role="navigation"
+      aria-label="main navigation"
+    >
       <div class="navbar-brand">
-
-        <a class="navbar-item" style="" href="/">
+        <a
+          class="navbar-item"
+          style=""
+          href="/"
+        >
           Raistlin
         </a>
 
-        <a role="button" class="navbar-burger burger" aria-label="menu"
-        aria-expanded="false" data-target="navbarBasicExample">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
+        <a
+          role="button"
+          class="navbar-burger burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
         </a>
       </div>
 
-      <div id="navbarBasicExample" class="navbar-menu">
+      <div
+        id="navbarBasicExample"
+        class="navbar-menu"
+      >
         <div class="navbar-start">
-          <router-link to="/tasks" class="navbar-item r-item">Tasks</router-link>
+          <router-link
+            to="/tasks"
+            class="navbar-item r-item"
+          >
+            Tasks
+          </router-link>
         </div>
 
         <div class="navbar-end">
@@ -32,10 +52,9 @@
       </div>
     </nav>
 
-    <router-view/>
+    <router-view />
     <div class="footer">
-      <div class="content has-text-centered">
-      </div>
+      <div class="content has-text-centered" />
     </div>
   </div>
 </template>

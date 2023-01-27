@@ -1,6 +1,6 @@
-import Tasks from './components/Tasks.vue';
-import Task from './components/Task.vue';
-import Job from './components/Job.vue';
+import TaskList from './components/TaskList.vue';
+import TaskItem from './components/TaskItem.vue';
+import JobItem from './components/JobItem.vue';
 import AddTask from './components/AddTask.vue';
 
 import { createRouter as _createRouter, createWebHashHistory } from 'vue-router';
@@ -16,17 +16,17 @@ export function createRouter () {
         {
           path: '/tasks',
           name: 'Tasks list',
-          component: Tasks,
+          component: TaskList,
         },
         {
           path: '/tasks/:task_id',
           name: 'Task',
-          component: Task,
+          component: TaskItem,
           children: [
             {
               path: 'job/:job_id',
               name: 'Job',
-              component: Job,
+              component: JobItem,
             },
           ],
         },
@@ -37,4 +37,4 @@ export function createRouter () {
         },
       ],
     });
-  };
+  }

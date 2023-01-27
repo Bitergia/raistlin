@@ -1,35 +1,62 @@
 <template>
-  <div class="container" style="align-items: center">
+  <div
+    class="container"
+    style="align-items: center"
+  >
     <!-- Errors -->
     <div v-if="errors && errors.length">
-      <article class="message is-danger" align="center" v-bind:key="error" v-for="error of errors">
+      <article
+        v-for="error of errors"
+        :key="error"
+        class="message is-danger"
+        align="center"
+      >
         <div class="message-header">
-          <p>Error {{error.status}}</p>
-          <button class="delete" aria-label="delete"></button>
+          <p>Error {{ error.status }}</p>
+          <button
+            class="delete"
+            aria-label="delete"
+          />
         </div>
-        <div class="message-body">{{error.data.message}}</div>
+        <div class="message-body">
+          {{ error.data.message }}
+        </div>
       </article>
     </div>
 
-    <h3 style="margin-top: 2%" class="title is-1" align="left">
+    <h3
+      style="margin-top: 2%"
+      class="title is-1"
+      align="left"
+    >
       KingArthur tasks list
       <router-link
         :to="{path: '/add_task' }"
         class="button is-link is-outlined"
         style="margin-top: 5px; float: right"
       >
-        <i style="margin-right: 8px" class="fas fa-plus"></i>New
+        <i
+          style="margin-right: 8px"
+          class="fas fa-plus"
+        />New
       </router-link>
     </h3>
     <div v-if="tasks && tasks.length">
       <ul>
-        <li v-bind:key="task.task_id" v-for="task of tasks" style="width: 100%">
+        <li
+          v-for="task of tasks"
+          :key="task.task_id"
+          style="width: 100%"
+        >
           <div class="columns">
-            <div class="column is-11" style="width: 95%">
+            <div
+              class="column is-11"
+              style="width: 95%"
+            >
               <div
                 class="card"
                 align="left"
-                v-bind:style="{ 'background': taskColorByStatus(task.status) }"
+                :style="{ 'background': taskColorByStatus(task.status) }"
               >
                 <div class="card-content task-card">
                   <router-link :to="{path: '/tasks/' + task.task_id }">
@@ -39,34 +66,45 @@
                         style="margin-left: 10px; border-right: 1px solid #c2c2c2;"
                       >
                         <div class="title is-6">
-                          <p style="display: inline-block; float: left">{{task.task_id}}</p>
+                          <p style="display: inline-block; float: left">
+                            {{ task.task_id }}
+                          </p>
                           <div
+                            v-for="job of task.jobs.slice(0,10)"
+                            :key="job.job_number"
                             class="job-square tooltip is-tooltip-bottom is-tooltip-multiline"
                             align="center"
-                            v-bind:data-tooltip="'#' + job.job_number + ' - ' + job.job_status"
-                            v-bind:key="job.job_number"
-                            v-for="job of task.jobs.slice(0,10)"
-                            v-bind:style="{ 'background-color': jobColorByStatus(job.job_status),
+                            :data-tooltip="'#' + job.job_number + ' - ' + job.job_status"
+                            :style="{ 'background-color': jobColorByStatus(job.job_status),
                                       'float': 'right' }"
-                          ></div>
+                          />
                         </div>
-                        <p>{{task.status}}</p>
+                        <p>{{ task.status }}</p>
                       </div>
-                      <div class="column" style="margin-left: 10px;">
+                      <div
+                        class="column"
+                        style="margin-left: 10px;"
+                      >
                         <p>
                           <i
                             style="margin-right: 8px"
                             class="fas text-muted"
-                            v-bind:class="iconByCategory(task.category)"
-                          ></i>
-                          {{task.backend}}
+                            :class="iconByCategory(task.category)"
+                          />
+                          {{ task.backend }}
                         </p>
                         <p>
-                          <i style="margin-right: 8px" class="fas fa-list-ol"></i>
-                          <b>{{task.jobs.length}}</b> jobs
+                          <i
+                            style="margin-right: 8px"
+                            class="fas fa-list-ol"
+                          />
+                          <b>{{ task.jobs.length }}</b> jobs
                         </p>
                         <p>
-                          <i style="margin-right: 8px" class="fas fa-calendar-alt text-muted"></i>
+                          <i
+                            style="margin-right: 8px"
+                            class="fas fa-calendar-alt text-muted"
+                          />
                           {{ $filters.prettyDate(task.created_on) }}
                         </p>
                       </div>
@@ -77,43 +115,68 @@
             </div>
             <div class="column is-1 stacked-card">
               <p>
-                <a class="fas text-muted fa-trash"
+                <a
+                  class="fas text-muted fa-trash"
                   style="font-size: 20px"
-                  v-on:click="openDeleteModal(task.task_id)"></a>
+                  @click="openDeleteModal(task.task_id)"
+                />
               </p>
               <p v-if="task.status === 'FAILED'">
-                <a class="fas text-muted fa-redo-alt"
+                <a
+                  class="fas text-muted fa-redo-alt"
                   style="font-size: 20px; margin-top: 10px"
-                  v-on:click="rescheduleFailedTask(task)"></a>
+                  @click="rescheduleFailedTask(task)"
+                />
               </p>
             </div>
           </div>
         </li>
       </ul>
     </div>
-    <article class="message is-warning" align="center" v-if="!tasks.length && !errors.length">
+    <article
+      v-if="!tasks.length && !errors.length"
+      class="message is-warning"
+      align="center"
+    >
       <div class="message-header">
         <p>Warning</p>
-        <button class="delete" aria-label="delete"></button>
+        <button
+          class="delete"
+          aria-label="delete"
+        />
       </div>
-      <div class="message-body">There aren't tasks in the KingArthur server</div>
+      <div class="message-body">
+        There aren't tasks in the KingArthur server
+      </div>
     </article>
 
-    <div class="modal" v-bind:class="{ 'is-active': activeModal }">
-      <div class="modal-background"></div>
+    <div
+      class="modal"
+      :class="{ 'is-active': activeModal }"
+    >
+      <div class="modal-background" />
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Warning!</p>
+          <p class="modal-card-title">
+            Warning!
+          </p>
         </header>
         <section class="modal-card-body">
-          Do you want to delete the task <b>{{taskToDelete}}</b>?
+          Do you want to delete the task <b>{{ taskToDelete }}</b>?
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success"
-            v-on:click="deleteTaskById(taskToDelete); closeDeleteModal()">
+          <button
+            class="button is-success"
+            @click="deleteTaskById(taskToDelete); closeDeleteModal()"
+          >
             Delete
           </button>
-          <button class="button is-danger" v-on:click="closeDeleteModal()">Cancel</button>
+          <button
+            class="button is-danger"
+            @click="closeDeleteModal()"
+          >
+            Cancel
+          </button>
         </footer>
       </div>
     </div>
@@ -126,7 +189,7 @@ import cssTask from './mixins/cssTask';
 import deleteTask from './mixins/deleteTask';
 
 export default {
-  name: 'Tasks',
+  name: 'TaskList',
   mixins: [cssTask, deleteTask],
   data: () => ({
     tasks: [],

@@ -1,35 +1,66 @@
 <template>
-  <div class="container" style="align-items: center">
+  <div
+    class="container"
+    style="align-items: center"
+  >
     <!-- Errors -->
     <div v-if="errors && errors.length">
-      <article class="message is-danger" align="center" v-bind:key="error" v-for="error of errors">
+      <article
+        v-for="error of errors"
+        :key="error"
+        class="message is-danger"
+        align="center"
+      >
         <div class="message-header">
-          <p>Error {{error.status}}</p>
-          <button class="delete" aria-label="delete"></button>
+          <p>Error {{ error.status }}</p>
+          <button
+            class="delete"
+            aria-label="delete"
+          />
         </div>
-        <div class="message-body">{{error.data.message}}</div>
+        <div class="message-body">
+          {{ error.data.message }}
+        </div>
       </article>
     </div>
 
     <div v-if="!errors.length">
-      <h2 style="margin-top: 2%" class="title is-2">Add new task</h2>
-      <div class="form-horizontal add-form" style="margin: 0 auto">
+      <h2
+        style="margin-top: 2%"
+        class="title is-2"
+      >
+        Add new task
+      </h2>
+      <div
+        class="form-horizontal add-form"
+        style="margin: 0 auto"
+      >
         <div class="field">
           <label class="label">Task ID</label>
           <div class="control">
-            <input v-model="taskData.task_id" class="input" type="text" placeholder="ID" />
+            <input
+              v-model="taskData.task_id"
+              class="input"
+              type="text"
+              placeholder="ID"
+            >
           </div>
         </div>
         <div class="field">
-          <label class="label" for="selectbackend">Backend</label>
+          <label
+            class="label"
+            for="selectbackend"
+          >Backend</label>
           <div class="control">
             <div class="select is-fullwidth">
               <select v-model="taskData.backendSelected">
                 <option
-                  v-bind:key="backend"
                   v-for="backend in backendOptions"
+                  :key="backend"
                   :value="backend"
-                >{{backend}}</option>
+                >
+                  {{ backend }}
+                </option>
               </select>
             </div>
           </div>
@@ -43,7 +74,7 @@
                 class="input"
                 type="text"
                 placeholder="path"
-              />
+              >
             </div>
           </div>
           <div class="field">
@@ -54,7 +85,7 @@
                 class="input"
                 type="text"
                 placeholder="uri"
-              />
+              >
             </div>
           </div>
           <div class="field">
@@ -65,11 +96,14 @@
                 class="input"
                 type="text"
                 placeholder="from_date"
-              />
+              >
             </div>
           </div>
           <div class="field">
-            <label class="label" for="selectGitCategory">Category</label>
+            <label
+              class="label"
+              for="selectGitCategory"
+            >Category</label>
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="taskData.category">
@@ -88,7 +122,7 @@
                 class="input"
                 type="text"
                 placeholder="url"
-              />
+              >
             </div>
           </div>
           <div class="field">
@@ -99,11 +133,14 @@
                 class="input"
                 type="text"
                 placeholder="from_date"
-              />
+              >
             </div>
           </div>
           <div class="field">
-            <label class="label" for="selectBugzillarestCategory">Category</label>
+            <label
+              class="label"
+              for="selectBugzillarestCategory"
+            >Category</label>
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="taskData.category">
@@ -113,7 +150,10 @@
             </div>
           </div>
         </div>
-        <div class="field" style="margin-top: 10px">
+        <div
+          class="field"
+          style="margin-top: 10px"
+        >
           <label class="label">Delay</label>
           <div class="control">
             <input
@@ -121,7 +161,7 @@
               class="input"
               type="text"
               placeholder="delay (ms)"
-            />
+            >
           </div>
         </div>
         <div class="field">
@@ -132,15 +172,25 @@
               class="input"
               type="text"
               placeholder="max retries (number)"
-            />
+            >
           </div>
         </div>
         <div class="field is-grouped">
           <div class="control">
-            <button v-on:click="addTask" class="button is-link">Add</button>
+            <button
+              class="button is-link"
+              @click="addTask"
+            >
+              Add
+            </button>
           </div>
           <div class="control">
-            <router-link to="/tasks" class="button is-text">Cancel</router-link>
+            <router-link
+              to="/tasks"
+              class="button is-text"
+            >
+              Cancel
+            </router-link>
           </div>
         </div>
       </div>
