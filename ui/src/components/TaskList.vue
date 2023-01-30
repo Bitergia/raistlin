@@ -12,6 +12,7 @@
         density="comfortable"
         type="error"
         variant="tonal"
+        class="mb-4"
       >
         {{ error.data.message }}
       </v-alert>
@@ -23,11 +24,9 @@
         :to="{path: '/add_task' }"
         variant="tonal"
         color="amber-darken-4"
+        prepend-icon="mdi-plus"
       >
-        <i
-          style="margin-right: 8px"
-          class="fas fa-plus"
-        />New
+        New
       </v-btn>
     </h3>
     <div v-if="tasks && tasks.length">

@@ -1,8 +1,16 @@
 <template>
   <v-app id="raistlinUI">
-    <v-app-bar role="navigation" density="compact" border="b" flat>
+    <v-app-bar
+      role="navigation"
+      density="compact"
+      border="b"
+      flat
+    >
       <v-app-bar-title>
-        <router-link to="/" class="text-subtitle-2 text-amber-darken-4">
+        <router-link
+          to="/"
+          class="text-subtitle-2 text-amber-darken-4"
+        >
           Raistlin
         </router-link>
       </v-app-bar-title>
