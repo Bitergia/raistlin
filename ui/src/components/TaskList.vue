@@ -5,133 +5,39 @@
   >
     <!-- Errors -->
     <div v-if="errors && errors.length">
-      <article
-        v-for="error of errors"
+      <v-alert
+        v-for="error in errors"
         :key="error"
-        class="message is-danger"
-        align="center"
+        :title="`Error ${error.status}`"
+        density="comfortable"
+        type="error"
+        variant="tonal"
       >
-        <div class="message-header">
-          <p>Error {{ error.status }}</p>
-          <button
-            class="delete"
-            aria-label="delete"
-          />
-        </div>
-        <div class="message-body">
-          {{ error.data.message }}
-        </div>
-      </article>
+        {{ error.data.message }}
+      </v-alert>
     </div>
 
-    <h3
-      style="margin-top: 2%"
-      class="title is-1"
-      align="left"
-    >
+    <h3 class="d-flex text-h3 mt-8 mb-8 justify-space-between align-end">
       KingArthur tasks list
-      <router-link
+      <v-btn
         :to="{path: '/add_task' }"
-        class="button is-link is-outlined"
-        style="margin-top: 5px; float: right"
+        variant="tonal"
+        color="amber-darken-4"
       >
         <i
           style="margin-right: 8px"
           class="fas fa-plus"
         />New
-      </router-link>
+      </v-btn>
     </h3>
     <div v-if="tasks && tasks.length">
-      <ul>
-        <li
-          v-for="task of tasks"
-          :key="task.task_id"
-          style="width: 100%"
-        >
-          <div class="columns">
-            <div
-              class="column is-11"
-              style="width: 95%"
-            >
-              <div
-                class="card"
-                align="left"
-                :style="{ 'background': taskColorByStatus(task.status) }"
-              >
-                <div class="card-content task-card">
-                  <router-link :to="{path: '/tasks/' + task.task_id }">
-                    <div class="columns">
-                      <div
-                        class="column"
-                        style="margin-left: 10px; border-right: 1px solid #c2c2c2;"
-                      >
-                        <div class="title is-6">
-                          <p style="display: inline-block; float: left">
-                            {{ task.task_id }}
-                          </p>
-                          <div
-                            v-for="job of task.jobs.slice(0,10)"
-                            :key="job.job_number"
-                            class="job-square tooltip is-tooltip-bottom is-tooltip-multiline"
-                            align="center"
-                            :data-tooltip="'#' + job.job_number + ' - ' + job.job_status"
-                            :style="{ 'background-color': jobColorByStatus(job.job_status),
-                                      'float': 'right' }"
-                          />
-                        </div>
-                        <p>{{ task.status }}</p>
-                      </div>
-                      <div
-                        class="column"
-                        style="margin-left: 10px;"
-                      >
-                        <p>
-                          <i
-                            style="margin-right: 8px"
-                            class="fas text-muted"
-                            :class="iconByCategory(task.category)"
-                          />
-                          {{ task.backend }}
-                        </p>
-                        <p>
-                          <i
-                            style="margin-right: 8px"
-                            class="fas fa-list-ol"
-                          />
-                          <b>{{ task.jobs.length }}</b> jobs
-                        </p>
-                        <p>
-                          <i
-                            style="margin-right: 8px"
-                            class="fas fa-calendar-alt text-muted"
-                          />
-                          {{ $filters.prettyDate(task.created_on) }}
-                        </p>
-                      </div>
-                    </div>
-                  </router-link>
-                </div>
-              </div>
-            </div>
-            <div class="column is-1 stacked-card">
-              <p>
-                <a
-                  class="fas text-muted fa-trash"
-                  style="font-size: 20px"
-                  @click="openDeleteModal(task.task_id)"
-                />
-              </p>
-              <p v-if="task.status === 'FAILED'">
-                <a
-                  class="fas text-muted fa-redo-alt"
-                  style="font-size: 20px; margin-top: 10px"
-                  @click="rescheduleFailedTask(task)"
-                />
-              </p>
-            </div>
-          </div>
-        </li>
-      </ul>
+      <task-card
+        v-for="task in tasks"
+        :key="task.task_id"
+        :to="{path: '/tasks/' + task.task_id }"
+        :task="task"
+        @open-modal="openDeleteModal(task.task_id)"
+      />
     </div>
     <article
       v-if="!tasks.length && !errors.length"
@@ -187,9 +93,11 @@
 import axios from 'axios';
 import cssTask from './mixins/cssTask';
 import deleteTask from './mixins/deleteTask';
+import TaskCard from './TaskCard.vue';
 
 export default {
   name: 'TaskList',
+  components: {TaskCard},
   mixins: [cssTask, deleteTask],
   data: () => ({
     tasks: [],
