@@ -5,6 +5,9 @@ const path = require("path");
 
 export default defineConfig({
   plugins: [vue()],
+  build: {
+    assetsDir: 'static'
+  },
   server: {
     proxy: {
       '/tasks': {

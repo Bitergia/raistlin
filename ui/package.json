@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vite preview",
+    "preview": "vite preview",
     "build": "vite build",
-    "dev": "vite",
+    "serve": "vite",
     "lint": "eslint --ext .js,.vue --fix src",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
