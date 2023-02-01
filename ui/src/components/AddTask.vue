@@ -38,12 +38,17 @@
         <div class="field">
           <label class="label">Task ID</label>
           <div class="control">
-            <input
+            <v-text-field
+              v-model="taskData.task_id"
+              placeholder="ID"
+              id="task_id"
+            />
+            <!-- <input
               v-model="taskData.task_id"
               class="input"
               type="text"
               placeholder="ID"
-            >
+            > -->
           </div>
         </div>
         <div class="field">

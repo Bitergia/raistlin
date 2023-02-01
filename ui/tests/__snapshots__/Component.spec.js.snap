@@ -1,0 +1,49 @@
+// Vitest Snapshot v1
+
+exports[`Vue + Vuetify component testing > check snapshots 1`] = `
+"<a class=\\"v-card v-card--link v-theme--light v-card--density-default v-card--variant-elevated\\">
+  <!---->
+  <div class=\\"v-card__loader\\">
+    <div class=\\"v-progress-linear v-theme--light\\" style=\\"top: 0px; height: 0px; --v-progress-linear-height: 2px; left: 50%; transform: translateX(-50%);\\" role=\\"progressbar\\" aria-hidden=\\"true\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">
+      <!---->
+      <div class=\\"v-progress-linear__background\\" style=\\"width: 100%;\\"></div>
+      <transition-stub name=\\"fade-transition\\" appear=\\"false\\" persisted=\\"false\\" css=\\"true\\">
+        <div class=\\"v-progress-linear__indeterminate\\">
+          <div class=\\"v-progress-linear__indeterminate long\\"></div>
+          <div class=\\"v-progress-linear__indeterminate short\\"></div>
+        </div>
+      </transition-stub>
+      <!---->
+    </div>
+  </div>
+  <!---->
+  <!---->
+  <div class=\\"d-flex flex-no-wrap justify-space-between pa-4\\">
+    <div class=\\"flex-grow-1\\">
+      <div class=\\"v-card-title\\">arthur.git <span class=\\"v-chip v-theme--light text-scheduled v-chip--density-default v-chip--size-small v-chip--variant-tonal ml-2 text-capitalize\\" draggable=\\"false\\"><!----><span class=\\"v-chip__underlay\\"></span>
+        <!---->
+        <!---->scheduled
+        <!---->
+        <!----></span>
+      </div>
+      <div class=\\"v-card-text\\">
+        <div class=\\"v-row\\">
+          <div class=\\"v-col v-col-6\\">
+            <p class=\\"mb-3\\"><span class=\\"font-weight-medium\\">1</span> jobs </p><i class=\\"mdi-square mdi v-icon notranslate v-theme--light v-icon--size-default text-finished\\" aria-hidden=\\"true\\"></i>
+          </div>
+          <div class=\\"v-col\\">
+            <p class=\\"mb-3\\"><i class=\\"mdi-git mdi v-icon notranslate v-theme--light v-icon--size-default\\" aria-hidden=\\"true\\"></i> git</p>
+            <p><i class=\\"mdi-calendar-month mdi v-icon notranslate v-theme--light v-icon--size-default\\" aria-hidden=\\"true\\"></i> 2023/2/6 11:15:10</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=\\"v-card-actions\\"><button type=\\"button\\" class=\\"v-btn v-btn--icon v-theme--light text-amber-darken-4 v-btn--density-default v-btn--size-default v-btn--variant-text\\"><span class=\\"v-btn__overlay\\"></span><span class=\\"v-btn__underlay\\"></span>
+        <!----><span class=\\"v-btn__content\\" data-no-activator=\\"\\"><i class=\\"mdi-delete mdi v-icon notranslate v-theme--light v-icon--size-default\\" aria-hidden=\\"true\\"></i></span>
+        <!---->
+        <!---->
+      </button></div>
+  </div>
+  <!----><span class=\\"v-card__overlay\\"></span><span class=\\"v-card__underlay\\"></span>
+</a>"
+`;
