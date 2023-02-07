@@ -1,7 +1,20 @@
 @charset "utf-8";
 
+@font-face {
+    font-family: 'Roboto';
+    src: local('Roboto-Regular'), url("/static/Roboto-Regular.woff") format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: local('Roboto-Medium'), url("/static/Roboto-Medium.woff") format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
 // Overwrite Bulma variables
-$link: #d17d00; 
+$link: #d17d00;
 
 
 @import "../../node_modules/bulma/bulma.sass";
